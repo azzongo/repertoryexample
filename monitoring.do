@@ -70,6 +70,8 @@
 
 * data raw
   insheet using "${path_data}/${csvfile}", names clear
+  
+  * this is a change
   e
 
 * create temporary variables
@@ -169,7 +171,11 @@
 	gen stat1 = nbenqrefabs_byenum v441 nbref_byenum v442 ///
 	nbtype1_byenum v443 ///
 	nbtype2_byenum v444 ///
-	nbtype3_byenum v445
+	nbtype3_byenum v445__just_to_dee
+	
+	* syfs
+	
+	
 	
 	
 	
@@ -598,6 +604,12 @@ e
 
 
 
+
+
+* table the statistics by enumerator
+  tab _zd_clean bi10_2, miss
+  bysort uniq_indiv_id_csv: gen dupp = 1 if _N > 2 
+  
 
 
 
