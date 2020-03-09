@@ -612,7 +612,41 @@ e
   
 
 
+  
+* total: sample size (nb of respondants) of each sous-prefecture
+  bysort sousprefname : gen nb_bysp = _N
+* total: number of completed survey in each sous-prefecture
+  bysort sousprefname : egen nb_obs_bysp = total(mergestatus == 3)
+* total: number of missing survey in each sous-prefecture 
+  bysort sousprefname : egen nb_miss_bysp = total(mergestatus == 1) 
 
+* tag the sp
+  egen tag = tag(sousprefname)
+  keep if tag == 1
+
+* percentages
+  gen freq_obs_bysp = nb_obs_bysp / nb_bysp
+  gen freq_miss_bysp = nb_miss_bysp / nb_bysp
+
+* disp
+  tabdisp sousprefname, cellvar(zd_missing village_missing freq_obs_bysp freq_miss_bysp zd_started)
+
+* order
+  order sousprefname zd_missing village_missing nb_miss_bysp freq_miss_bysp ///
+  nb_bysp nb_obs_bysp freq_obs_bysp ///
+  nb_zd_bysp nb_village_bysp zd_started village_started
+
+* keep
+  keep sousprefname zd_missing village_missing nb_miss_bysp freq_miss_bysp ///
+  nb_bysp nb_obs_bysp freq_obs_bysp ///
+  nb_zd_bysp nb_village_bysp zd_started village_started
+
+* export
+  export excel "${path_output}/${day}/monitoring_${day}.xlsx", ///
+  sheet("15. statistics - rm") firstrow(varlabels) sheetmodify
+
+* restore
+  restore
 
 
 
